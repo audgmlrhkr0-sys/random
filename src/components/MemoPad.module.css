@@ -1,0 +1,61 @@
+.memoPad {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.memoPad:hover {
+  transform: translateY(-4px) rotate(-1deg);
+}
+
+.memoPad:active {
+  transform: translateY(-2px) scale(0.98);
+}
+
+.paper {
+  width: 220px;
+  height: 260px;
+  background: linear-gradient(160deg, #fffdf8 0%, var(--parchment) 50%, var(--parchment-warm) 100%);
+  border-radius: 3px;
+  box-shadow: 3px 5px 14px rgba(28, 18, 10, 0.25), inset 0 0 40px rgba(201, 168, 124, 0.08);
+  position: relative;
+  padding: 2rem 1.5rem;
+  border: 1px solid rgba(107, 79, 58, 0.35);
+}
+
+.paper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 24px;
+  background: linear-gradient(to bottom, rgba(196, 163, 90, 0.15), transparent);
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  margin-top: 0.5rem;
+}
+
+.lines span {
+  display: block;
+  height: 1px;
+  background: rgba(107, 79, 58, 0.2);
+  width: 100%;
+}
+
+.hint {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-hand);
+  font-size: 1.4rem;
+  color: var(--moss);
+  opacity: 0.85;
+}

@@ -12,15 +12,14 @@ export default function PasswordGate({ onUnlock }) {
       onUnlock();
       return;
     }
-    setError('비밀번호가 틀렸습니다');
+    setError('비밀번호가 틀렸어요! 다시 입력해 보세요');
   };
 
   return (
     <div className={styles.wrap}>
       <div className={styles.panel}>
-        <p className={styles.tag}>&gt; ACCESS_GATE</p>
-        <h1 className={styles.title}>입장 코드</h1>
-        <p className={styles.desc}>공유받은 링크 · 비밀번호 입력 후 입장</p>
+        <h1 className={styles.title}>비밀번호 입력</h1>
+        <p className={styles.desc}>선생님이 알려준 숫자를 입력하세요</p>
         <form onSubmit={handleSubmit} className={styles.form}>
           <input
             type="password"
@@ -36,7 +35,7 @@ export default function PasswordGate({ onUnlock }) {
           />
           {error && <p className={styles.error}>{error}</p>}
           <button type="submit" className={styles.btn}>
-            입장 →
+            들어가기
           </button>
         </form>
       </div>

@@ -96,12 +96,21 @@ export async function fetchRoomData(roomId) {
 }
 
 export async function updateTeamNames(roomId, teamNames) {
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('rooms')
     .update({ team_names: teamNames, updated_at: new Date().toISOString() })
-    .eq('id', roomId);
+    .eq('id', roomId)
+    .select('team_names')
+    .single();
 
-  if (error) throw error;
+  if (error) {
+    const msg =
+      error.code === 'PGRST204' || error.message?.includes('team_names')
+        ? 'team_names 컬럼이 없습니다. Supabase SQL Editor에서 migration_team_names.sql 실행'
+        : error.message;
+    throw new Error(msg);
+  }
+  return data?.team_names;
 }
 
 export async function addSubmission(roomId, { teamId, text }) {

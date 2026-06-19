@@ -26,6 +26,7 @@ export function RoomProvider() {
   const [excludeOwnTeam, setExcludeOwnTeamState] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [saveStatus, setSaveStatus] = useState('');
   const [unlocked, setUnlocked] = useState(
     () => sessionStorage.getItem(getRoomUnlockKey(roomId)) === '1'
   );
@@ -119,15 +120,31 @@ export function RoomProvider() {
     await reload();
   }, [roomId, reload]);
 
-  const updateTeamName = useCallback(
-    async (index, name) => {
-      const trimmed = name.trim() || DEFAULT_TEAM_NAMES[index] || `${index + 1}팀`;
-      const next = [...teamNames];
-      next[index] = trimmed;
+  const updateAllTeamNames = useCallback(
+    async (names) => {
+      const next = names.map((n, i) =>
+        (n?.trim() || DEFAULT_TEAM_NAMES[i] || `${i + 1}팀`)
+      );
       setTeamNames(next);
-      await apiUpdateTeamNames(roomId, next);
+      setSaveStatus('saving');
+      try {
+        await apiUpdateTeamNames(roomId, next);
+        setSaveStatus('saved');
+        setTimeout(() => setSaveStatus(''), 2000);
+        await reload();
+      } catch (err) {
+        setSaveStatus('error');
+        console.error(err.message || '팀 이름 저장 실패');
+      }
     },
-    [roomId, teamNames]
+    [roomId, reload]
+  );
+
+  const updateTeamName = useCallback(
+    (index, name) => updateAllTeamNames(
+      teamNames.map((n, i) => (i === index ? name : n))
+    ),
+    [teamNames, updateAllTeamNames]
   );
 
   const getTeamName = useCallback(
@@ -149,6 +166,8 @@ export function RoomProvider() {
     saveDrawResult,
     clearAllData,
     updateTeamName,
+    updateAllTeamNames,
+    saveStatus,
     getTeamName,
     getTeamSubmissions: (teamId) =>
       submissions.filter((s) => s.teamId === Number(teamId)),

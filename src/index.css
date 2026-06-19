@@ -9,45 +9,46 @@
 }
 
 :root {
-  --cyber-bg: #030806;
-  --cyber-bg2: #071510;
-  --cyber-panel: rgba(8, 28, 14, 0.92);
+  --cyber-bg: #102818;
+  --cyber-bg2: #1a3828;
+  --cyber-panel: rgba(255, 255, 255, 0.12);
+  --cyber-panel-solid: #1e4a32;
   --neon: #39ff14;
   --neon-bright: #7fff00;
-  --neon-dim: #1f6b18;
-  --neon-soft: rgba(57, 255, 20, 0.15);
-  --neon-glow: 0 0 14px rgba(57, 255, 20, 0.55), 0 0 28px rgba(57, 255, 20, 0.2);
-  --cyber-text: #d4ffd4;
-  --cyber-text-dim: #7dff7d;
-  --cyber-danger: #ff3366;
+  --neon-dim: #2a8a3a;
+  --neon-soft: rgba(57, 255, 20, 0.25);
+  --neon-glow: 0 0 16px rgba(57, 255, 20, 0.5);
+  --cyber-text: #ffffff;
+  --cyber-text-dim: #c8ffc8;
+  --cyber-danger: #ff4477;
   --cyber-accent: #00ffaa;
   --font-body: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Malgun Gothic', sans-serif;
-  --font-mono: 'Consolas', 'Courier New', monospace;
+  --font-mono: var(--font-body);
   --font-hand: var(--font-body);
 
   --ink: var(--cyber-text);
   --ink-light: var(--cyber-text-dim);
-  --white: #0a1a0e;
+  --white: #ffffff;
   --sky: var(--cyber-panel);
   --sky-deep: var(--neon-dim);
   --mint: var(--neon-soft);
-  --lemon: #b8ff20;
-  --peach: rgba(57, 255, 20, 0.2);
+  --lemon: #d4ff00;
+  --peach: rgba(57, 255, 20, 0.3);
   --coral: var(--neon);
-  --coral-dark: var(--neon-dim);
+  --coral-dark: #2d8a2d;
   --blue: var(--neon-bright);
   --blue-dark: var(--neon-dim);
   --purple: #00ff88;
-  --paper: #0d1f12;
+  --paper: #f0fff4;
   --color-bg: var(--cyber-bg);
   --color-paper: var(--paper);
-  --color-ink: var(--cyber-text);
+  --color-ink: #1a3020;
   --color-ink-light: var(--cyber-text-dim);
   --color-accent: var(--neon);
   --color-accent-hover: var(--neon-bright);
-  --color-success: var(--neon);
+  --color-success: #2ecc71;
   --shadow: var(--neon-glow);
-  --shadow-pop: 0 0 20px rgba(57, 255, 20, 0.45);
+  --shadow-pop: 0 4px 0 #2a8a3a, 0 0 20px rgba(57, 255, 20, 0.35);
 }
 
 html,
@@ -58,16 +59,16 @@ body,
 
 body {
   font-family: var(--font-body);
+  font-size: 17px;
   color: var(--cyber-text);
-  line-height: 1.6;
+  line-height: 1.65;
   background-color: var(--cyber-bg);
   background-image:
-    linear-gradient(rgba(57, 255, 20, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(57, 255, 20, 0.04) 1px, transparent 1px),
-    radial-gradient(ellipse at 20% 0%, rgba(57, 255, 20, 0.12) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 100%, rgba(0, 255, 136, 0.08) 0%, transparent 45%),
-    linear-gradient(180deg, #030806 0%, #071510 50%, #030806 100%);
-  background-size: 48px 48px, 48px 48px, auto, auto, auto;
+    linear-gradient(rgba(57, 255, 20, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(57, 255, 20, 0.08) 1px, transparent 1px),
+    radial-gradient(ellipse at 50% 0%, rgba(127, 255, 0, 0.2) 0%, transparent 55%),
+    linear-gradient(180deg, #143322 0%, #102818 50%, #0d2018 100%);
+  background-size: 40px 40px, 40px 40px, auto, auto;
   background-attachment: fixed;
 }
 
@@ -89,6 +90,6 @@ textarea {
 }
 
 ::selection {
-  background: rgba(57, 255, 20, 0.35);
-  color: #fff;
+  background: rgba(57, 255, 20, 0.45);
+  color: #000;
 }

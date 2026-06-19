@@ -1,10 +1,10 @@
 .folded {
-  width: 52px;
-  height: 40px;
+  width: 56px;
+  height: 44px;
   background: linear-gradient(135deg, #39ff14, #7fff00);
-  border: 2px solid var(--neon-bright);
-  border-radius: 3px;
-  box-shadow: var(--neon-glow), 2px 4px 8px rgba(0, 0, 0, 0.4);
+  border: 3px solid #ffffff;
+  border-radius: 6px;
+  box-shadow: 0 0 12px rgba(57, 255, 20, 0.7), 2px 4px 8px rgba(0, 0, 0, 0.2);
   position: relative;
   flex-shrink: 0;
 }
@@ -16,7 +16,6 @@
   width: 0;
   height: 0;
   border-style: solid;
-  border-width: 0 16px 16px 0;
-  border-color: transparent #b8ff20 transparent transparent;
-  opacity: 0.85;
+  border-width: 0 18px 18px 0;
+  border-color: transparent #d4ff00 transparent transparent;
 }

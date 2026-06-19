@@ -20,19 +20,17 @@
   position: absolute;
   top: 1.5rem;
   left: 1.5rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--neon);
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  background: var(--cyber-panel);
-  border: 1px solid var(--neon-dim);
-  box-shadow: var(--neon-glow);
-  transition: transform 0.2s, border-color 0.2s;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #1a3020;
+  padding: 0.6rem 1.1rem;
+  border-radius: 999px;
+  background: var(--neon-bright);
+  border: 3px solid var(--neon);
+  box-shadow: var(--shadow-pop);
   z-index: 10;
 }
 
 .backLink:hover {
-  border-color: var(--neon);
   transform: translateX(-2px);
 }

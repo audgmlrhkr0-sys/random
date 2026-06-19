@@ -19,6 +19,18 @@ export function generateRoomId() {
   return id;
 }
 
+/** Supabase 연결 테스트 — rooms 테이블 읽기만 시도 */
+export async function checkConnection() {
+  const { error } = await supabase.from('rooms').select('id').limit(1);
+  if (error) {
+    if (error.code === 'PGRST205') {
+      return { ok: false, message: '테이블이 없어요. Supabase SQL Editor에서 schema.sql 실행' };
+    }
+    return { ok: false, message: '연결 실패. npm run dev로 실행했는지 확인' };
+  }
+  return { ok: true, message: '연결됨!' };
+}
+
 export async function createRoom() {
   const roomId = generateRoomId();
   const { error } = await supabase.from('rooms').insert({ id: roomId });

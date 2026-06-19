@@ -30,10 +30,24 @@ npm run dev
 
 브라우저에서 `http://localhost:5173` 접속 → **새 활동 시작하기** → 생성된 링크를 팀원에게 공유
 
-### 배포
+### 링크로 배포 (GitHub Pages — random 저장소)
 
-Vercel, Netlify 등에 배포할 때도 환경 변수 `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`를 설정하세요.
+GitHub에 올린 뒤 **Settings → Pages → Source: GitHub Actions** 로 설정하세요.  
+(Deploy from branch ❌ — 그렇게 하면 `바로실행.html` 오프라인 버전만 뜹니다)
 
+1. GitHub 저장소 **Settings → Secrets and variables → Actions** 에 추가:
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_ANON_KEY`
+2. 최신 코드 push → Actions 탭에서 **Deploy to GitHub Pages** 성공 확인
+3. 접속 주소: `https://(본인아이디).github.io/random/`
+4. **✅ Supabase 연결됨** 보이면 → **새 활동 시작하기** → `/r/abc123` 링크 공유
+
+### Vercel로 배포 (대안)
+
+1. [vercel.com](https://vercel.com) → GitHub **`random`** 연결
+2. Environment Variables: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`  
+   (`VITE_BASE_PATH` 는 넣지 않음)
+3. Deploy → `https://random-xxx.vercel.app`
 ## 사용 흐름
 
 1. 진행자가 **새 활동 시작** → `/r/abc123` 형태의 공유 링크 생성

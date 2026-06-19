@@ -57,7 +57,7 @@ export default function TeamPage() {
             제출한 감상법: <strong>{count}개</strong>
             {needsMore && (
               <span className={styles.hint}>
-                {' '}(최소 {MIN_SUBMISSIONS_HINT}개 이상 작성해주세요)
+                {' '}(팀당 {MIN_SUBMISSIONS_HINT}개 이상 쪽지를 작성해주세요)
               </span>
             )}
           </p>
@@ -81,6 +81,10 @@ export default function TeamPage() {
                 아직 쪽지가 없어요!
                 <br />
                 메모지를 눌러 작성해보세요
+                <br />
+                <span className={styles.submittedHint}>
+                  (팀당 {MIN_SUBMISSIONS_HINT}개 이상, 한 쪽지에 하나씩)
+                </span>
               </p>
             ) : (
               submissions.map((s, idx) => (

@@ -42,12 +42,13 @@ export default function WriteModal({ isOpen, onClose, onSubmit, teamName }) {
         {phase === 'writing' && (
           <>
             <h2 className={styles.title}>{teamName} — 감상법 작성</h2>
-            <p className={styles.guide}>최소 {MIN_SUBMISSIONS_HINT}개 이상 작성해주세요</p>
+            <p className={styles.guide}>팀당 {MIN_SUBMISSIONS_HINT}개 이상 쪽지를 작성해주세요</p>
+            <p className={styles.textareaHint}>한 쪽지에는 감상법을 하나만 적어주세요</p>
             <textarea
               className={styles.textarea}
               value={text}
               onChange={(e) => setText(e.target.value)}
-              placeholder="이 작품을 어떻게 감상하면 좋을지 적어주세요."
+              placeholder="예) 색감에 집중하며 천천히 둘러보기"
               rows={6}
               autoFocus
             />

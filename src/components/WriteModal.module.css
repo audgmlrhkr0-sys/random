@@ -34,7 +34,13 @@
   font-size: 1rem;
   font-weight: 600;
   color: #2a7040;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.textareaHint {
+  font-size: 0.9rem;
+  color: #3a8060;
+  margin-bottom: 0.75rem;
 }
 
 .textarea {

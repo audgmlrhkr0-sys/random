@@ -87,6 +87,14 @@
   border-radius: 16px;
 }
 
+.submittedHint {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #ffee88;
+  font-weight: 600;
+}
+
 .submittedItem {
   display: flex;
   align-items: flex-start;

@@ -1,6 +1,13 @@
 import { supabase } from './supabase';
 import { DEFAULT_TEAM_NAMES } from '../config';
 
+function requireClient() {
+  if (!supabase) {
+    throw new Error('SERVICE_UNAVAILABLE');
+  }
+  return supabase;
+}
+
 function mapSubmission(row) {
   return {
     id: row.id,
@@ -26,7 +33,8 @@ export function generateRoomId() {
 }
 
 export async function checkConnection() {
-  const { error } = await supabase.from('rooms').select('id').limit(1);
+  const client = requireClient();
+  const { error } = await client.from('rooms').select('id').limit(1);
   if (error) {
     return { ok: false, message: '연결할 수 없습니다. 잠시 후 다시 시도해 주세요.' };
   }
@@ -34,8 +42,9 @@ export async function checkConnection() {
 }
 
 export async function createRoom() {
+  const client = requireClient();
   const roomId = generateRoomId();
-  const { error } = await supabase.from('rooms').insert({
+  const { error } = await client.from('rooms').insert({
     id: roomId,
     team_names: DEFAULT_TEAM_NAMES,
   });
@@ -44,7 +53,8 @@ export async function createRoom() {
 }
 
 export async function ensureRoom(roomId) {
-  const { data, error } = await supabase
+  const client = requireClient();
+  const { data, error } = await client
     .from('rooms')
     .select('id')
     .eq('id', roomId)
@@ -53,7 +63,7 @@ export async function ensureRoom(roomId) {
   if (error) throw error;
   if (data) return true;
 
-  const { error: insertError } = await supabase.from('rooms').insert({
+  const { error: insertError } = await client.from('rooms').insert({
     id: roomId,
     team_names: DEFAULT_TEAM_NAMES,
   });
@@ -62,9 +72,10 @@ export async function ensureRoom(roomId) {
 }
 
 export async function fetchRoomData(roomId) {
+  const client = requireClient();
   const [roomRes, submissionsRes] = await Promise.all([
-    supabase.from('rooms').select('*').eq('id', roomId).single(),
-    supabase
+    client.from('rooms').select('*').eq('id', roomId).single(),
+    client
       .from('submissions')
       .select('*')
       .eq('room_id', roomId)
@@ -93,7 +104,8 @@ export async function fetchRoomData(roomId) {
 }
 
 export async function updateTeamNames(roomId, teamNames) {
-  const { data, error } = await supabase
+  const client = requireClient();
+  const { data, error } = await client
     .from('rooms')
     .update({ team_names: teamNames, updated_at: new Date().toISOString() })
     .eq('id', roomId)
@@ -107,7 +119,8 @@ export async function updateTeamNames(roomId, teamNames) {
 }
 
 export async function addSubmission(roomId, { teamId, text }) {
-  const { data, error } = await supabase
+  const client = requireClient();
+  const { data, error } = await client
     .from('submissions')
     .insert({
       room_id: roomId,
@@ -122,7 +135,8 @@ export async function addSubmission(roomId, { teamId, text }) {
 }
 
 export async function deleteSubmission(roomId, submissionId) {
-  const { error } = await supabase
+  const client = requireClient();
+  const { error } = await client
     .from('submissions')
     .delete()
     .eq('room_id', roomId)
@@ -132,7 +146,8 @@ export async function deleteSubmission(roomId, submissionId) {
 }
 
 export async function setExcludeOwnTeam(roomId, value) {
-  const { error } = await supabase
+  const client = requireClient();
+  const { error } = await client
     .from('rooms')
     .update({ exclude_own_team: value, updated_at: new Date().toISOString() })
     .eq('id', roomId);
@@ -141,7 +156,8 @@ export async function setExcludeOwnTeam(roomId, value) {
 }
 
 export async function saveDrawResult(roomId, result) {
-  const { error } = await supabase
+  const client = requireClient();
+  const { error } = await client
     .from('rooms')
     .update({ draw_result: result, updated_at: new Date().toISOString() })
     .eq('id', roomId);
@@ -150,14 +166,15 @@ export async function saveDrawResult(roomId, result) {
 }
 
 export async function clearRoom(roomId) {
-  const { error: deleteError } = await supabase
+  const client = requireClient();
+  const { error: deleteError } = await client
     .from('submissions')
     .delete()
     .eq('room_id', roomId);
 
   if (deleteError) throw deleteError;
 
-  const { error: updateError } = await supabase
+  const { error: updateError } = await client
     .from('rooms')
     .update({
       draw_result: null,
@@ -171,7 +188,8 @@ export async function clearRoom(roomId) {
 }
 
 export function subscribeToRoom(roomId, onChange) {
-  const channel = supabase
+  const client = requireClient();
+  const channel = client
     .channel(`room:${roomId}`)
     .on(
       'postgres_changes',
@@ -186,6 +204,6 @@ export function subscribeToRoom(roomId, onChange) {
     .subscribe();
 
   return () => {
-    supabase.removeChannel(channel);
+    client.removeChannel(channel);
   };
 }

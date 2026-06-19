@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { useRoom } from '../context/RoomContext';
 import { TEAM_COUNT } from '../config';
+import { getRoomShareUrl } from '../utils/shareUrl';
 import styles from './MainPage.module.css';
 
 export default function MainPage() {
@@ -16,7 +17,9 @@ export default function MainPage() {
   } = useRoom();
 
   const [localNames, setLocalNames] = useState(teamNames);
+  const [copied, setCopied] = useState(false);
   const skipSync = useRef(false);
+  const shareUrl = getRoomShareUrl(roomId);
 
   useEffect(() => {
     if (skipSync.current) {
@@ -54,11 +57,37 @@ export default function MainPage() {
     }
   };
 
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  };
+
   return (
     <Layout>
       <div className={styles.container}>
         <h1 className={styles.title}>감상법 제비뽑기</h1>
         <p className={styles.subtitle}>우리 팀 이름을 바꾸고 입장하세요!</p>
+
+        <div className={styles.shareBox}>
+          <p className={styles.shareLabel}>함께 쓸 링크</p>
+          <div className={styles.shareRow}>
+            <input
+              type="text"
+              readOnly
+              value={shareUrl}
+              className={styles.shareInput}
+              aria-label="공유 링크"
+            />
+            <button type="button" className={styles.copyBtn} onClick={handleCopyLink}>
+              {copied ? '복사됨!' : '복사'}
+            </button>
+          </div>
+        </div>
 
         <div className={styles.statusBar}>
           <span>

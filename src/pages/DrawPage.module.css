@@ -186,6 +186,21 @@
   box-shadow: none;
 }
 
+.doneNotice {
+  padding: 0.85rem 1.1rem;
+  background: rgba(127, 255, 0, 0.12);
+  border: 1px solid var(--neon-dim);
+  border-radius: 8px;
+  color: var(--cyber-text);
+  font-weight: 600;
+}
+
+.resultLink {
+  color: var(--neon-bright);
+  font-weight: 800;
+  text-decoration: underline;
+}
+
 .resetSection {
   margin-top: 3rem;
   padding-top: 2rem;

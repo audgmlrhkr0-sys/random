@@ -25,6 +25,51 @@
   max-width: 440px;
 }
 
+.shareBox {
+  width: 100%;
+  max-width: 640px;
+  padding: 1rem 1.1rem;
+  background: var(--cyber-panel);
+  border: 2px solid var(--neon-dim);
+  border-radius: 16px;
+  text-align: left;
+}
+
+.shareLabel {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--neon-bright);
+  margin-bottom: 0.6rem;
+}
+
+.shareRow {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.shareInput {
+  flex: 1;
+  min-width: 200px;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--neon-dim);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--cyber-text);
+  font-size: 0.9rem;
+}
+
+.copyBtn {
+  padding: 0.65rem 1rem;
+  font-weight: 800;
+  color: #030806;
+  background: var(--neon);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
 .statusBar {
   display: flex;
   flex-wrap: wrap;

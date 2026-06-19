@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
 import PasswordGate from '../components/PasswordGate';
 import { useRoom } from '../context/RoomContext';
@@ -24,13 +24,7 @@ export default function DrawPage() {
 
   const required = getRequiredSubmissionCount();
   const statusMessage = getDrawStatusMessage(submissions, teamNames);
-  const canDrawNow = !statusMessage;
-
-  useEffect(() => {
-    if (drawUnlocked && drawResult) {
-      navigate(`/r/${roomId}/result`, { replace: true });
-    }
-  }, [drawUnlocked, drawResult, roomId, navigate]);
+  const canDrawNow = !statusMessage && !drawResult;
 
   const handleDrawUnlock = () => {
     sessionStorage.setItem(getDrawUnlockKey(roomId), '1');
@@ -114,7 +108,16 @@ export default function DrawPage() {
           </div>
         </div>
 
-        {statusMessage && <div className={styles.warning}>⚠ {statusMessage}</div>}
+        {statusMessage && !drawResult && <div className={styles.warning}>⚠ {statusMessage}</div>}
+
+        {drawResult && (
+          <div className={styles.doneNotice}>
+            이미 추첨이 끝났어요.{' '}
+            <Link to={`/r/${roomId}/result`} className={styles.resultLink}>
+              결과 보기
+            </Link>
+          </div>
+        )}
 
         {error && <div className={styles.error}>{error}</div>}
 
@@ -148,7 +151,7 @@ export default function DrawPage() {
           onClick={handleDraw}
           disabled={!canDrawNow || shuffling}
         >
-          {shuffling ? '추첨 중...' : '추첨 결과'}
+          {shuffling ? '추첨 중...' : drawResult ? '추첨 완료' : '추첨하기'}
         </button>
 
         <div className={styles.resetSection}>
@@ -159,6 +162,7 @@ export default function DrawPage() {
           >
             데이터 초기화
           </button>
+          <p className={styles.resetHint}>다음 회차 시작 전에만 눌러주세요</p>
         </div>
 
         {showResetConfirm && (

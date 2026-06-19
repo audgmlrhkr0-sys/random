@@ -9,6 +9,7 @@ export const EXCLUDE_OWN_TEAM_ALWAYS = true;
 export const SHOW_AUTHOR_TEAM = false;
 export const ROOM_PASSWORD = '9650';
 export const DRAW_PASSWORD = '0000';
+export const DEFAULT_ROOM_ID = 'gamsang';
 
 export const STORAGE_KEYS = {
   submissions: 'appreciation_submissions',

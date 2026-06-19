@@ -1,5 +1,8 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
+import Layout from '../components/Layout';
+import PasswordGate from '../components/PasswordGate';
+import { DEFAULT_TEAM_NAMES, getRoomUnlockKey } from '../config';
 import { isSupabaseConfigured } from '../utils/supabase';
 import {
   ensureRoom,
@@ -9,6 +12,7 @@ import {
   setExcludeOwnTeam as apiSetExcludeOwnTeam,
   saveDrawResult as apiSaveDrawResult,
   clearRoom as apiClearRoom,
+  updateTeamNames as apiUpdateTeamNames,
   subscribeToRoom,
 } from '../utils/roomApi';
 
@@ -18,9 +22,13 @@ export function RoomProvider() {
   const { roomId } = useParams();
   const [submissions, setSubmissions] = useState([]);
   const [drawResult, setDrawResult] = useState(null);
+  const [teamNames, setTeamNames] = useState([...DEFAULT_TEAM_NAMES]);
   const [excludeOwnTeam, setExcludeOwnTeamState] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [unlocked, setUnlocked] = useState(
+    () => sessionStorage.getItem(getRoomUnlockKey(roomId)) === '1'
+  );
 
   const reload = useCallback(async () => {
     if (!roomId || !isSupabaseConfigured) return;
@@ -28,6 +36,7 @@ export function RoomProvider() {
       const data = await fetchRoomData(roomId);
       setSubmissions(data.submissions);
       setDrawResult(data.drawResult);
+      setTeamNames(data.teamNames);
       setExcludeOwnTeamState(data.excludeOwnTeam);
       setError('');
     } catch (err) {
@@ -68,6 +77,11 @@ export function RoomProvider() {
     };
   }, [roomId, reload]);
 
+  const handleUnlock = useCallback(() => {
+    sessionStorage.setItem(getRoomUnlockKey(roomId), '1');
+    setUnlocked(true);
+  }, [roomId]);
+
   const addSubmission = useCallback(
     async ({ teamId, text }) => {
       await apiAddSubmission(roomId, { teamId, text });
@@ -105,10 +119,27 @@ export function RoomProvider() {
     await reload();
   }, [roomId, reload]);
 
+  const updateTeamName = useCallback(
+    async (index, name) => {
+      const trimmed = name.trim() || DEFAULT_TEAM_NAMES[index] || `${index + 1}팀`;
+      const next = [...teamNames];
+      next[index] = trimmed;
+      setTeamNames(next);
+      await apiUpdateTeamNames(roomId, next);
+    },
+    [roomId, teamNames]
+  );
+
+  const getTeamName = useCallback(
+    (teamId) => teamNames[Number(teamId) - 1] ?? `${teamId}팀`,
+    [teamNames]
+  );
+
   const value = {
     roomId,
     submissions,
     drawResult,
+    teamNames,
     excludeOwnTeam,
     loading,
     error,
@@ -117,9 +148,35 @@ export function RoomProvider() {
     setExcludeOwnTeam,
     saveDrawResult,
     clearAllData,
+    updateTeamName,
+    getTeamName,
     getTeamSubmissions: (teamId) =>
       submissions.filter((s) => s.teamId === Number(teamId)),
   };
+
+  if (loading) {
+    return (
+      <Layout>
+        <p style={{ color: 'var(--cyber-text-dim)', padding: '3rem' }}>불러오는 중...</p>
+      </Layout>
+    );
+  }
+
+  if (error) {
+    return (
+      <Layout>
+        <p style={{ color: 'var(--cyber-danger)', padding: '3rem' }}>{error}</p>
+      </Layout>
+    );
+  }
+
+  if (!unlocked) {
+    return (
+      <Layout>
+        <PasswordGate onUnlock={handleUnlock} />
+      </Layout>
+    );
+  }
 
   return (
     <RoomContext.Provider value={value}>

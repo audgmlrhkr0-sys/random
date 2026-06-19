@@ -14,24 +14,25 @@
 .teamTitle {
   font-size: 2rem;
   font-weight: 800;
-  color: var(--ink);
+  color: var(--neon);
   margin-bottom: 0.4rem;
+  text-shadow: var(--neon-glow);
 }
 
 .count {
   font-size: 1rem;
   font-weight: 500;
-  color: var(--ink-light);
+  color: var(--cyber-text-dim);
 }
 
 .count strong {
-  color: var(--coral);
+  color: var(--neon-bright);
   font-size: 1.2rem;
   font-weight: 800;
 }
 
 .hint {
-  color: var(--blue-dark);
+  color: var(--cyber-accent);
   font-size: 0.9rem;
   font-weight: 600;
 }
@@ -43,17 +44,18 @@
   gap: 2rem;
   width: 100%;
   padding: 2rem;
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 24px;
-  border: 3px solid white;
-  box-shadow: var(--shadow);
+  background: var(--cyber-panel);
+  border-radius: 4px;
+  border: 1px solid var(--neon-dim);
+  box-shadow: inset 0 0 30px rgba(57, 255, 20, 0.04);
   flex-wrap: wrap;
 }
 
 .foldedStack {
   display: flex;
   flex-direction: column-reverse;
-  min-width: 50px;
+  gap: 4px;
+  min-width: 60px;
   padding: 0.5rem;
 }
 
@@ -65,7 +67,7 @@
 
 .pencil {
   margin-bottom: 1.5rem;
-  filter: drop-shadow(2px 3px 4px rgba(0, 0, 0, 0.12));
+  filter: drop-shadow(0 0 6px rgba(57, 255, 20, 0.4));
 }
 
 .submittedPanel {
@@ -75,20 +77,23 @@
 }
 
 .submittedPanel h3 {
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   margin-bottom: 0.75rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px dashed var(--sky-deep);
+  border-bottom: 1px dashed var(--neon-dim);
+  color: var(--neon);
+  font-family: var(--font-mono);
 }
 
 .submittedEmpty {
   font-size: 0.9rem;
-  color: var(--ink-light);
+  color: var(--cyber-text-dim);
   padding: 1rem;
   text-align: center;
-  background: var(--mint);
-  border-radius: 12px;
+  background: rgba(57, 255, 20, 0.06);
+  border: 1px dashed var(--neon-dim);
+  border-radius: 4px;
 }
 
 .submittedItem {
@@ -97,10 +102,9 @@
   gap: 0.6rem;
   padding: 0.75rem;
   margin-bottom: 0.5rem;
-  background: var(--white);
-  border: 2px solid var(--peach);
-  border-radius: 12px;
-  box-shadow: 0 2px 0 rgba(255, 143, 171, 0.2);
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--neon-dim);
+  border-radius: 4px;
 }
 
 .submittedText {
@@ -108,6 +112,7 @@
   font-size: 0.9rem;
   line-height: 1.5;
   word-break: break-word;
+  color: var(--cyber-text);
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -119,11 +124,10 @@
   padding: 0.35rem 0.65rem;
   font-size: 0.8rem;
   font-weight: 700;
-  color: white;
-  background: #ff7b7b;
-  border: 2px solid #e85a5a;
-  border-radius: 8px;
-  box-shadow: 0 3px 0 #d04545;
+  color: #fff;
+  background: var(--cyber-danger);
+  border: 1px solid #ff5588;
+  border-radius: 4px;
 }
 
 @media (max-width: 700px) {

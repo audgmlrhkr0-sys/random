@@ -2,12 +2,19 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { useRoom } from '../context/RoomContext';
-import { TEAM_NAMES } from '../config';
+import { TEAM_COUNT } from '../config';
 import styles from './MainPage.module.css';
 
 export default function MainPage() {
-  const { roomId, submissions, drawResult, loading, error } = useRoom();
+  const {
+    roomId,
+    submissions,
+    drawResult,
+    teamNames,
+    updateTeamName,
+  } = useRoom();
   const [copied, setCopied] = useState(false);
+  const [draftNames, setDraftNames] = useState({});
 
   const shareUrl = `${window.location.origin}${window.location.pathname}#/r/${roomId}`;
 
@@ -21,36 +28,29 @@ export default function MainPage() {
     }
   };
 
-  if (loading) {
-    return (
-      <Layout>
-        <div className={styles.container}>
-          <p>불러오는 중...</p>
-        </div>
-      </Layout>
-    );
-  }
-
-  if (error) {
-    return (
-      <Layout>
-        <div className={styles.container}>
-          <p className={styles.error}>{error}</p>
-        </div>
-      </Layout>
-    );
-  }
+  const handleNameBlur = (index) => {
+    const value = draftNames[index] ?? teamNames[index];
+    setDraftNames((prev) => {
+      const next = { ...prev };
+      delete next[index];
+      return next;
+    });
+    if (value.trim() !== teamNames[index]) {
+      updateTeamName(index, value);
+    }
+  };
 
   return (
     <Layout>
       <div className={styles.container}>
+        <p className={styles.tag}>&gt; CYBER_LOTTERY // SYNC_ON</p>
         <h1 className={styles.title}>감상법 제비뽑기</h1>
         <p className={styles.subtitle}>
-          팀별로 감상법을 작성하고, 추첨으로 다른 팀의 감상법을 받아보세요
+          팀명을 수정하고 입장하세요 · 변경 사항은 모두에게 실시간 반영
         </p>
 
         <div className={styles.shareBox}>
-          <p className={styles.shareLabel}>📎 이 링크를 팀원들에게 공유하세요</p>
+          <p className={styles.shareLabel}>▸ 공유 링크 (입장 비밀번호: 9650)</p>
           <div className={styles.shareRow}>
             <input
               type="text"
@@ -60,17 +60,16 @@ export default function MainPage() {
               onFocus={(e) => e.target.select()}
             />
             <button type="button" className={styles.copyBtn} onClick={handleCopy}>
-              {copied ? '복사됨!' : '복사'}
+              {copied ? '복사됨' : '복사'}
             </button>
           </div>
           <p className={styles.shareHint}>
             전체 제출: <strong>{submissions.length}개</strong>
             {drawResult && (
               <>
-                {' '}
-                ·{' '}
+                {' · '}
                 <Link to={`/r/${roomId}/result`} className={styles.resultLink}>
-                  추첨 결과 보기 →
+                  추첨 결과 →
                 </Link>
               </>
             )}
@@ -78,18 +77,31 @@ export default function MainPage() {
         </div>
 
         <div className={styles.teamGrid}>
-          {TEAM_NAMES.map((name, index) => {
+          {Array.from({ length: TEAM_COUNT }, (_, index) => {
             const teamSubmissions = submissions.filter((s) => s.teamId === index + 1);
+            const name = teamNames[index] ?? `${index + 1}팀`;
+
             return (
-              <Link
-                key={index}
-                to={`/r/${roomId}/team/${index + 1}`}
-                className={styles.teamBtn}
-              >
+              <div key={index} className={styles.teamCard}>
                 <span className={styles.teamNumber}>{index + 1}</span>
-                <span className={styles.teamName}>{name}</span>
+                <input
+                  type="text"
+                  className={styles.teamNameInput}
+                  value={draftNames[index] ?? name}
+                  onChange={(e) =>
+                    setDraftNames((prev) => ({ ...prev, [index]: e.target.value }))
+                  }
+                  onBlur={() => handleNameBlur(index)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') e.target.blur();
+                  }}
+                  aria-label={`${index + 1}팀 이름`}
+                />
                 <span className={styles.teamCount}>{teamSubmissions.length}개 제출</span>
-              </Link>
+                <Link to={`/r/${roomId}/team/${index + 1}`} className={styles.enterBtn}>
+                  입장 →
+                </Link>
+              </div>
             );
           })}
         </div>

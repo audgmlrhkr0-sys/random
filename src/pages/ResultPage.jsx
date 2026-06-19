@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { useRoom } from '../context/RoomContext';
-import { TEAM_NAMES, SHOW_AUTHOR_TEAM, TEAM_COUNT } from '../config';
+import { TEAM_COUNT, SHOW_AUTHOR_TEAM } from '../config';
 import styles from './ResultPage.module.css';
 
 export default function ResultPage() {
   const navigate = useNavigate();
-  const { roomId, drawResult, loading } = useRoom();
+  const { roomId, drawResult, loading, getTeamName } = useRoom();
   const [showAuthor, setShowAuthor] = useState(SHOW_AUTHOR_TEAM);
   const [revealedCards, setRevealedCards] = useState({});
 
@@ -57,7 +57,7 @@ export default function ResultPage() {
         <div className={styles.teamGrid}>
           {Array.from({ length: TEAM_COUNT }, (_, i) => {
             const teamId = i + 1;
-            const teamName = TEAM_NAMES[i] ?? `${teamId}팀`;
+            const teamName = getTeamName(teamId);
             const notes = drawResult[teamId] ?? [];
 
             return (
@@ -89,7 +89,7 @@ export default function ResultPage() {
                             <p className={styles.noteText}>{note.text}</p>
                             {showAuthor && note.authorTeamId && (
                               <span className={styles.author}>
-                                — {TEAM_NAMES[note.authorTeamId - 1] ?? `${note.authorTeamId}팀`}
+                                — {getTeamName(note.authorTeamId)}
                               </span>
                             )}
                           </div>

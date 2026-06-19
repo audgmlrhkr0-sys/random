@@ -10,36 +10,37 @@
 }
 
 .title {
-  font-size: 3rem;
+  font-size: 2.5rem;
   font-weight: 800;
-  color: var(--ink);
+  color: var(--neon);
+  text-shadow: var(--neon-glow);
 }
 
 .subtitle {
-  font-size: 1.05rem;
-  color: var(--ink-light);
+  font-size: 1rem;
+  color: var(--cyber-text-dim);
   max-width: 420px;
 }
 
 .createBtn {
   padding: 1rem 2rem;
   font-size: 1.1rem;
-  font-weight: 700;
-  color: white;
-  background: linear-gradient(180deg, var(--blue), var(--blue-dark));
-  border: 3px solid var(--blue-dark);
-  border-radius: 999px;
-  box-shadow: 0 5px 0 #3a8fd4;
+  font-weight: 800;
+  color: #030806;
+  background: var(--neon);
+  border: none;
+  border-radius: 4px;
+  box-shadow: var(--neon-glow);
   cursor: pointer;
 }
 
 .createBtn:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: wait;
 }
 
 .divider {
-  color: var(--ink-light);
+  color: var(--cyber-text-dim);
   font-size: 0.9rem;
 }
 
@@ -52,91 +53,72 @@
 
 .joinInput {
   padding: 0.75rem 1rem;
-  border: 2px solid var(--sky-deep);
-  border-radius: 12px;
+  border: 1px solid var(--neon-dim);
+  border-radius: 4px;
   font-size: 1rem;
   min-width: 220px;
+  background: rgba(0, 0, 0, 0.4);
+  color: var(--cyber-text);
 }
 
 .joinBtn {
   padding: 0.75rem 1.25rem;
   font-weight: 700;
-  background: var(--white);
-  border: 2px solid var(--sky-deep);
-  border-radius: 12px;
+  background: transparent;
+  color: var(--neon);
+  border: 2px solid var(--neon);
+  border-radius: 4px;
   cursor: pointer;
 }
 
 .joinBtn:disabled {
   opacity: 0.5;
-  cursor: not-allowed;
 }
 
 .error {
-  color: #c0392b;
+  color: var(--cyber-danger);
   font-weight: 600;
 }
 
 .setupBox {
   max-width: 520px;
   text-align: left;
-  background: rgba(255, 255, 255, 0.8);
-  border: 2px solid var(--white);
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow: var(--shadow);
-}
-
-.setupBox h2 {
-  font-size: 1.2rem;
-  margin-bottom: 0.75rem;
-}
-
-.setupBox ol {
-  margin-top: 1rem;
-  padding-left: 1.25rem;
-  line-height: 1.8;
-}
-
-.setupBox code {
-  background: #f0f4f8;
-  padding: 0.1rem 0.35rem;
+  background: var(--cyber-panel);
+  border: 1px solid var(--neon-dim);
   border-radius: 4px;
-  font-size: 0.9em;
+  padding: 1.5rem;
+  color: var(--cyber-text-dim);
 }
 
 .connBox {
   width: 100%;
   max-width: 420px;
   padding: 0.85rem 1.1rem;
-  border-radius: 14px;
+  border-radius: 4px;
   font-weight: 700;
   font-size: 1rem;
 }
 
 .connChecking {
-  background: #f0f4f8;
-  color: var(--ink-light);
-  border: 2px solid var(--sky-deep);
+  background: var(--cyber-panel);
+  color: var(--cyber-text-dim);
+  border: 1px solid var(--neon-dim);
 }
 
 .connOk {
-  background: #e8f8ef;
-  color: #1a7a4a;
-  border: 2px solid #5cb88a;
+  background: rgba(57, 255, 20, 0.1);
+  color: var(--neon);
+  border: 1px solid var(--neon);
+  box-shadow: var(--neon-glow);
 }
 
 .connFail {
-  background: #fff0f0;
-  color: #c0392b;
-  border: 2px solid #ffb0b0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+  background: rgba(255, 51, 102, 0.1);
+  color: var(--cyber-danger);
+  border: 1px solid var(--cyber-danger);
 }
 
 .connHint {
   font-size: 0.85rem;
   font-weight: 600;
-  opacity: 0.9;
 }

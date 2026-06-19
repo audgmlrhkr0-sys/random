@@ -4,20 +4,19 @@
 }
 
 .title {
-  font-family: var(--font-hand);
-  font-size: 3rem;
+  font-size: 2.5rem;
+  font-weight: 800;
   text-align: center;
   margin-bottom: 0.5rem;
-  color: var(--parchment);
-  text-shadow: 0 2px 8px rgba(28, 18, 10, 0.35);
+  color: var(--neon);
+  text-shadow: var(--neon-glow);
 }
 
 .syncHint {
   text-align: center;
   font-size: 0.9rem;
-  color: var(--wood-cream);
+  color: var(--cyber-text-dim);
   margin-bottom: 1rem;
-  opacity: 0.9;
 }
 
 .toggle {
@@ -26,15 +25,13 @@
   justify-content: center;
   gap: 0.5rem;
   font-size: 0.9rem;
-  color: var(--wood-cream);
+  color: var(--cyber-text-dim);
   margin-bottom: 2rem;
   cursor: pointer;
 }
 
 .toggle input {
-  width: 16px;
-  height: 16px;
-  accent-color: var(--moss);
+  accent-color: var(--neon);
 }
 
 .teamGrid {
@@ -45,20 +42,19 @@
 }
 
 .teamSection {
-  background: linear-gradient(180deg, var(--wood-cream) 0%, var(--wood-surface) 100%);
-  border: 3px solid var(--wood-dark);
-  border-radius: 12px;
+  background: var(--cyber-panel);
+  border: 1px solid var(--neon-dim);
+  border-radius: 4px;
   padding: 1.25rem;
-  box-shadow: var(--shadow-wood), inset 0 1px 0 rgba(255, 248, 235, 0.25);
 }
 
 .teamName {
   font-size: 1.2rem;
-  font-weight: 700;
-  color: var(--moss-dark);
+  font-weight: 800;
+  color: var(--neon);
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px dashed rgba(107, 79, 58, 0.35);
+  border-bottom: 1px dashed var(--neon-dim);
 }
 
 .notes {
@@ -69,27 +65,29 @@
 
 .noteCard {
   min-height: 72px;
-  border-radius: 8px;
+  border-radius: 4px;
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .noteCard:not(.revealed):hover {
   transform: scale(1.02);
+  box-shadow: var(--neon-glow);
 }
 
 .foldedFront {
   height: 72px;
-  background: linear-gradient(135deg, var(--parchment-warm), #c9b08a);
-  border: 1px solid rgba(107, 79, 58, 0.4);
+  background: linear-gradient(135deg, #39ff14, #7fff00);
+  border: 2px solid var(--neon-bright);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 0.15rem;
   position: relative;
-  color: var(--wood-deep);
+  color: #030806;
+  font-weight: 700;
 }
 
 .foldedFront::after {
@@ -99,43 +97,31 @@
   right: 0;
   border-width: 0 20px 20px 0;
   border-style: solid;
-  border-color: transparent #a07855 transparent transparent;
-  opacity: 0.5;
-}
-
-.foldedFront span {
-  font-weight: 600;
+  border-color: transparent #b8ff20 transparent transparent;
 }
 
 .foldedFront small {
   font-size: 0.75rem;
-  color: var(--wood-mid);
+  opacity: 0.8;
 }
 
 .unfolded {
-  background: linear-gradient(145deg, #fffdf8, var(--parchment));
-  border: 1px solid rgba(107, 79, 58, 0.35);
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--neon);
   padding: 1rem 1.25rem;
   animation: unfold 0.6s ease;
-  box-shadow: inset 0 0 20px rgba(201, 168, 124, 0.1);
+  box-shadow: var(--neon-glow);
 }
 
 @keyframes unfold {
-  0% {
-    transform: scaleY(0.3) rotateX(60deg);
-    opacity: 0.5;
-  }
-  100% {
-    transform: scaleY(1) rotateX(0);
-    opacity: 1;
-  }
+  0% { transform: scaleY(0.3); opacity: 0.5; }
+  100% { transform: scaleY(1); opacity: 1; }
 }
 
 .noteText {
-  font-family: var(--font-hand);
-  font-size: 1.25rem;
+  font-size: 1.05rem;
   line-height: 1.7;
-  color: var(--wood-deep);
+  color: var(--cyber-text);
   white-space: pre-wrap;
   word-break: break-word;
 }
@@ -144,8 +130,7 @@
   display: block;
   margin-top: 0.5rem;
   font-size: 0.8rem;
-  color: var(--wood-mid);
-  font-style: italic;
+  color: var(--neon);
 }
 
 .actions {
@@ -159,42 +144,36 @@
 .homeBtn,
 .linkBtn {
   padding: 0.75rem 1.75rem;
-  border-radius: 10px;
-  font-weight: 500;
+  border-radius: 4px;
+  font-weight: 700;
   font-size: 0.95rem;
-  transition: transform 0.2s, filter 0.2s;
+  transition: transform 0.2s;
 }
 
 .redrawBtn {
-  background: linear-gradient(180deg, var(--moss-light), var(--moss));
-  color: var(--parchment);
-  border: 2px solid var(--moss-dark);
-  box-shadow: 0 4px 0 var(--moss-dark);
-}
-
-.redrawBtn:hover {
-  filter: brightness(1.06);
-  transform: translateY(-2px);
+  background: var(--neon);
+  color: #030806;
+  border: none;
+  box-shadow: var(--neon-glow);
 }
 
 .homeBtn,
 .linkBtn {
-  background: linear-gradient(180deg, var(--wood-light), var(--wood-dark));
-  color: var(--parchment);
-  border: 2px solid var(--wood-deep);
-  box-shadow: 0 4px 0 var(--wood-deep);
+  background: transparent;
+  color: var(--neon);
+  border: 2px solid var(--neon);
 }
 
+.redrawBtn:hover,
 .homeBtn:hover,
 .linkBtn:hover {
-  filter: brightness(1.06);
   transform: translateY(-2px);
 }
 
 .empty {
   text-align: center;
   padding: 4rem 2rem;
-  color: var(--wood-cream);
+  color: var(--cyber-text-dim);
 }
 
 .empty p {

@@ -6,19 +6,20 @@ import Pencil from '../components/Pencil';
 import FoldedNote from '../components/FoldedNote';
 import WriteModal from '../components/WriteModal';
 import { useRoom } from '../context/RoomContext';
-import { TEAM_NAMES, MIN_SUBMISSIONS_HINT } from '../config';
+import { TEAM_COUNT, MIN_SUBMISSIONS_HINT } from '../config';
 import styles from './TeamPage.module.css';
 
 export default function TeamPage() {
   const { teamId } = useParams();
-  const { roomId, getTeamSubmissions, addSubmission, deleteSubmission, loading } = useRoom();
+  const { roomId, getTeamSubmissions, addSubmission, deleteSubmission, getTeamName, loading } =
+    useRoom();
   const teamIndex = Number(teamId) - 1;
 
-  if (teamIndex < 0 || teamIndex >= TEAM_NAMES.length) {
+  if (teamIndex < 0 || teamIndex >= TEAM_COUNT) {
     return <Navigate to={`/r/${roomId}`} replace />;
   }
 
-  const teamName = TEAM_NAMES[teamIndex];
+  const teamName = getTeamName(teamId);
   const submissions = getTeamSubmissions(teamId);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -68,19 +69,19 @@ export default function TeamPage() {
             <MemoPad onClick={() => setModalOpen(true)} />
             <Pencil className={styles.pencil} />
             <div className={styles.foldedStack}>
-              {submissions.map((_, i) => (
-                <FoldedNote key={i} index={i} />
+              {submissions.map((s, i) => (
+                <FoldedNote key={s.id} index={i} />
               ))}
             </div>
           </div>
 
           <div className={styles.submittedPanel}>
-            <h3>📝 내가 쓴 쪽지</h3>
+            <h3>▸ 내가 쓴 쪽지</h3>
             {submissions.length === 0 ? (
               <p className={styles.submittedEmpty}>
                 아직 쪽지가 없어요!
                 <br />
-                메모지를 눌러 작성해보세요 ✏️
+                메모지를 눌러 작성해보세요
               </p>
             ) : (
               submissions.map((s, idx) => (

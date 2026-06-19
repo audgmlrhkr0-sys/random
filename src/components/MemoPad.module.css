@@ -7,22 +7,19 @@
 }
 
 .memoPad:hover {
-  transform: translateY(-4px) rotate(-1deg);
-}
-
-.memoPad:active {
-  transform: translateY(-2px) scale(0.98);
+  transform: translateY(-4px);
+  filter: drop-shadow(0 0 12px rgba(57, 255, 20, 0.5));
 }
 
 .paper {
   width: 220px;
   height: 260px;
-  background: linear-gradient(160deg, #fffdf8 0%, var(--parchment) 50%, var(--parchment-warm) 100%);
-  border-radius: 3px;
-  box-shadow: 3px 5px 14px rgba(28, 18, 10, 0.25), inset 0 0 40px rgba(201, 168, 124, 0.08);
+  background: linear-gradient(160deg, #0d1f12 0%, #122818 100%);
+  border-radius: 4px;
+  box-shadow: var(--neon-glow), inset 0 0 30px rgba(57, 255, 20, 0.06);
   position: relative;
   padding: 2rem 1.5rem;
-  border: 1px solid rgba(107, 79, 58, 0.35);
+  border: 2px solid var(--neon-dim);
 }
 
 .paper::before {
@@ -32,7 +29,7 @@
   left: 0;
   right: 0;
   height: 24px;
-  background: linear-gradient(to bottom, rgba(196, 163, 90, 0.15), transparent);
+  background: linear-gradient(to bottom, rgba(57, 255, 20, 0.15), transparent);
 }
 
 .lines {
@@ -45,7 +42,7 @@
 .lines span {
   display: block;
   height: 1px;
-  background: rgba(107, 79, 58, 0.2);
+  background: rgba(57, 255, 20, 0.25);
   width: 100%;
 }
 
@@ -54,8 +51,9 @@
   bottom: 1.5rem;
   left: 50%;
   transform: translateX(-50%);
-  font-family: var(--font-hand);
-  font-size: 1.4rem;
-  color: var(--moss);
-  opacity: 0.85;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--neon);
+  white-space: nowrap;
+  text-shadow: var(--neon-glow);
 }

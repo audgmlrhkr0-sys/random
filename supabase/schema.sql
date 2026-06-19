@@ -4,6 +4,7 @@ create table if not exists rooms (
   id text primary key,
   exclude_own_team boolean not null default false,
   draw_result jsonb,
+  team_names jsonb default '["1팀","2팀","3팀","4팀","5팀"]'::jsonb,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );

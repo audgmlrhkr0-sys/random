@@ -102,7 +102,7 @@ export default function MainPage() {
         </div>
 
         <Link to={`/r/${roomId}/draw`} className={styles.drawLink}>
-          추첨하러 가기
+          추첨 결과
         </Link>
       </div>
     </Layout>

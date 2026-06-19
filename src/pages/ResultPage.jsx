@@ -2,13 +2,13 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { useRoom } from '../context/RoomContext';
-import { TEAM_COUNT, SHOW_AUTHOR_TEAM } from '../config';
+import { TEAM_COUNT } from '../config';
 import styles from './ResultPage.module.css';
 
 export default function ResultPage() {
   const navigate = useNavigate();
   const { roomId, drawResult, loading, getTeamName } = useRoom();
-  const [showAuthor, setShowAuthor] = useState(SHOW_AUTHOR_TEAM);
+  const [showAuthor, setShowAuthor] = useState(true);
   const [revealedCards, setRevealedCards] = useState({});
 
   if (loading) {
@@ -27,7 +27,7 @@ export default function ResultPage() {
         <div className={styles.empty}>
           <p>아직 추첨 결과가 없습니다.</p>
           <Link to={`/r/${roomId}/draw`} className={styles.linkBtn}>
-            추첨하러 가기
+            추첨 결과
           </Link>
         </div>
       </Layout>
@@ -82,14 +82,17 @@ export default function ResultPage() {
                         {!isRevealed ? (
                           <div className={styles.foldedFront}>
                             <span>쪽지 {index + 1}</span>
-                            <small>클릭하여 펼치기</small>
+                            {showAuthor && (
+                              <small>{note.authorTeamName ?? getTeamName(note.authorTeamId)}</small>
+                            )}
+                            {!showAuthor && <small>클릭하여 펼치기</small>}
                           </div>
                         ) : (
                           <div className={styles.unfolded}>
                             <p className={styles.noteText}>{note.text}</p>
-                            {showAuthor && note.authorTeamId && (
+                            {showAuthor && (
                               <span className={styles.author}>
-                                — {getTeamName(note.authorTeamId)}
+                                — {note.authorTeamName ?? getTeamName(note.authorTeamId)}
                               </span>
                             )}
                           </div>
@@ -109,7 +112,7 @@ export default function ResultPage() {
             className={styles.redrawBtn}
             onClick={() => navigate(`/r/${roomId}/draw`)}
           >
-            다시 추첨
+            추첨 결과
           </button>
           <Link to={`/r/${roomId}`} className={styles.homeBtn}>
             메인으로

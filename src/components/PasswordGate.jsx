@@ -2,13 +2,19 @@ import { useState } from 'react';
 import { ROOM_PASSWORD } from '../config';
 import styles from './PasswordGate.module.css';
 
-export default function PasswordGate({ onUnlock }) {
+export default function PasswordGate({
+  onUnlock,
+  expectedPassword = ROOM_PASSWORD,
+  title = '비밀번호 입력',
+  desc = '선생님이 알려준 숫자를 입력하세요',
+  submitLabel = '들어가기',
+}) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (password === ROOM_PASSWORD) {
+    if (password === expectedPassword) {
       onUnlock();
       return;
     }
@@ -18,8 +24,8 @@ export default function PasswordGate({ onUnlock }) {
   return (
     <div className={styles.wrap}>
       <div className={styles.panel}>
-        <h1 className={styles.title}>비밀번호 입력</h1>
-        <p className={styles.desc}>선생님이 알려준 숫자를 입력하세요</p>
+        <h1 className={styles.title}>{title}</h1>
+        <p className={styles.desc}>{desc}</p>
         <form onSubmit={handleSubmit} className={styles.form}>
           <input
             type="password"
@@ -35,7 +41,7 @@ export default function PasswordGate({ onUnlock }) {
           />
           {error && <p className={styles.error}>{error}</p>}
           <button type="submit" className={styles.btn}>
-            들어가기
+            {submitLabel}
           </button>
         </form>
       </div>

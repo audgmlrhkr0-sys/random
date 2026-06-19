@@ -101,8 +101,9 @@
 }
 
 .foldedFront small {
-  font-size: 0.75rem;
-  opacity: 0.8;
+  font-size: 0.8rem;
+  font-weight: 700;
+  opacity: 0.95;
 }
 
 .unfolded {

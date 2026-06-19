@@ -1,36 +1,40 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
+import PasswordGate from '../components/PasswordGate';
 import { useRoom } from '../context/RoomContext';
-import { DRAW_COUNT_PER_TEAM } from '../config';
 import {
-  performDraw,
-  getRequiredSubmissionCount,
-  getSubmissionShortage,
-} from '../utils/draw';
+  DRAW_COUNT_PER_TEAM,
+  MIN_TOTAL_FOR_DRAW,
+  DRAW_PASSWORD,
+  getDrawUnlockKey,
+} from '../config';
+import { performDraw, getRequiredSubmissionCount, getDrawStatusMessage } from '../utils/draw';
 import styles from './DrawPage.module.css';
 
 export default function DrawPage() {
   const navigate = useNavigate();
-  const {
-    roomId,
-    submissions,
-    excludeOwnTeam,
-    setExcludeOwnTeam,
-    saveDrawResult,
-    clearAllData,
-    loading,
-  } = useRoom();
+  const { roomId, submissions, drawResult, saveDrawResult, clearAllData, loading, getTeamName, teamNames } = useRoom();
+  const [drawUnlocked, setDrawUnlocked] = useState(
+    () => sessionStorage.getItem(getDrawUnlockKey(roomId)) === '1'
+  );
   const [shuffling, setShuffling] = useState(false);
   const [error, setError] = useState('');
   const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   const required = getRequiredSubmissionCount();
-  const shortage = getSubmissionShortage(submissions);
-  const canDrawNow = shortage === 0;
+  const statusMessage = getDrawStatusMessage(submissions, teamNames);
+  const canDrawNow = !statusMessage;
 
-  const handleToggleExclude = async (checked) => {
-    await setExcludeOwnTeam(checked);
+  useEffect(() => {
+    if (drawUnlocked && drawResult) {
+      navigate(`/r/${roomId}/result`, { replace: true });
+    }
+  }, [drawUnlocked, drawResult, roomId, navigate]);
+
+  const handleDrawUnlock = () => {
+    sessionStorage.setItem(getDrawUnlockKey(roomId), '1');
+    setDrawUnlocked(true);
   };
 
   const handleDraw = () => {
@@ -38,7 +42,7 @@ export default function DrawPage() {
     setShuffling(true);
 
     setTimeout(async () => {
-      const result = performDraw(submissions, excludeOwnTeam);
+      const result = performDraw(submissions, teamNames);
       setShuffling(false);
 
       if (!result.success) {
@@ -75,11 +79,24 @@ export default function DrawPage() {
     );
   }
 
+  if (!drawUnlocked) {
+    return (
+      <Layout showBack backTo={`/r/${roomId}`}>
+        <PasswordGate
+          expectedPassword={DRAW_PASSWORD}
+          title="추첨 결과"
+          desc="선생님만 아는 숫자를 입력하세요"
+          submitLabel="들어가기"
+          onUnlock={handleDrawUnlock}
+        />
+      </Layout>
+    );
+  }
+
   return (
     <Layout showBack backTo={`/r/${roomId}`}>
       <div className={styles.container}>
-        <h1 className={styles.title}>추첨</h1>
-        <p className={styles.subtitle}>진행자 전용 화면 · 모든 기기에 실시간 반영</p>
+        <h1 className={styles.title}>추첨 결과</h1>
 
         <div className={styles.stats}>
           <div className={styles.statCard}>
@@ -87,8 +104,8 @@ export default function DrawPage() {
             <span className={styles.statValue}>{submissions.length}개</span>
           </div>
           <div className={styles.statCard}>
-            <span className={styles.statLabel}>필요 수량</span>
-            <span className={styles.statValue}>{required}개</span>
+            <span className={styles.statLabel}>추첨 가능</span>
+            <span className={styles.statValue}>{required}개 이상</span>
           </div>
           <div className={styles.statCard}>
             <span className={styles.statLabel}>팀당 배정</span>
@@ -96,11 +113,7 @@ export default function DrawPage() {
           </div>
         </div>
 
-        {!canDrawNow && (
-          <div className={styles.warning}>
-            ⚠ 쪽지가 {shortage}개 부족해요! (5팀 × 3개 = 15개 필요)
-          </div>
-        )}
+        {statusMessage && <div className={styles.warning}>⚠ {statusMessage}</div>}
 
         {error && <div className={styles.error}>{error}</div>}
 
@@ -115,7 +128,7 @@ export default function DrawPage() {
                 '--y': `${Math.floor(i / 5) * 14 - 28}px`,
               }}
             >
-              <span>{s.teamId}팀</span>
+              <span>{getTeamName(s.teamId)}</span>
             </div>
           ))}
           {submissions.length > 20 && (
@@ -126,14 +139,7 @@ export default function DrawPage() {
           )}
         </div>
 
-        <label className={`${styles.optionToggle} ${excludeOwnTeam ? styles.optionToggleActive : ''}`}>
-          <input
-            type="checkbox"
-            checked={excludeOwnTeam}
-            onChange={(e) => handleToggleExclude(e.target.checked)}
-          />
-          자기 팀 쪽지 제외하기
-        </label>
+        <p className={styles.excludeNote}>※ 자기 팀 쪽지는 자동으로 빠져요</p>
 
         <button
           type="button"
@@ -141,7 +147,7 @@ export default function DrawPage() {
           onClick={handleDraw}
           disabled={!canDrawNow || shuffling}
         >
-          {shuffling ? '추첨 중...' : '추첨하기 🎲'}
+          {shuffling ? '추첨 중...' : '추첨 결과'}
         </button>
 
         <div className={styles.resetSection}>
@@ -152,26 +158,18 @@ export default function DrawPage() {
           >
             데이터 초기화
           </button>
-          <p className={styles.resetHint}>
-            제출한 쪽지와 추첨 결과가 <strong>모두 삭제</strong>됩니다.
-            <br />
-            다음 회차 시작 전에만 눌러주세요.
-          </p>
         </div>
 
         {showResetConfirm && (
           <div className={styles.confirmBackdrop}>
             <div className={styles.confirmBox}>
-              <p>제출한 모든 쪽지와 추첨 결과를 삭제할까요?</p>
-              <p style={{ fontSize: '0.85rem', color: '#6b7a8f', marginTop: '0.5rem' }}>
-                삭제하면 되돌릴 수 없어요!
-              </p>
+              <p>제출한 모든 쪽지와 추첨 결과를 초기화할까요?</p>
               <div className={styles.confirmActions}>
                 <button type="button" onClick={() => setShowResetConfirm(false)}>
                   취소
                 </button>
                 <button type="button" className={styles.confirmDelete} onClick={handleReset}>
-                  삭제
+                  초기화
                 </button>
               </div>
             </div>

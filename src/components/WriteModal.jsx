@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styles from './WriteModal.module.css';
+import { MIN_SUBMISSIONS_HINT } from '../config';
 
 export default function WriteModal({ isOpen, onClose, onSubmit, teamName }) {
   const [text, setText] = useState('');
@@ -41,7 +42,7 @@ export default function WriteModal({ isOpen, onClose, onSubmit, teamName }) {
         {phase === 'writing' && (
           <>
             <h2 className={styles.title}>{teamName} — 감상법 작성</h2>
-            <p className={styles.guide}>최소 3개 이상 작성해주세요</p>
+            <p className={styles.guide}>최소 {MIN_SUBMISSIONS_HINT}개 이상 작성해주세요</p>
             <textarea
               className={styles.textarea}
               value={text}

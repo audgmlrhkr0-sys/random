@@ -84,16 +84,22 @@
 }
 
 .poolNote {
-  width: 52px;
-  height: 40px;
+  min-width: 56px;
+  max-width: 88px;
+  min-height: 44px;
+  height: auto;
+  padding: 0.3rem 0.35rem;
   background: linear-gradient(135deg, #39ff14, #7fff00);
   border: 2px solid var(--neon-bright);
   border-radius: 3px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.7rem;
+  text-align: center;
+  font-size: 0.65rem;
   font-weight: 700;
+  line-height: 1.2;
+  word-break: keep-all;
   color: #030806;
   box-shadow: var(--neon-glow);
 }
@@ -148,6 +154,13 @@
 
 .optionToggle input {
   accent-color: var(--neon);
+}
+
+.excludeNote {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--cyber-text-dim);
+  margin: 0.5rem 0 1rem;
 }
 
 .drawBtn {

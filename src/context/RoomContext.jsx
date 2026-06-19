@@ -31,7 +31,10 @@ export function RoomProvider() {
       setExcludeOwnTeamState(data.excludeOwnTeam);
       setError('');
     } catch (err) {
-      setError(err.message || '데이터를 불러오지 못했습니다.');
+      const msg = err.code === 'PGRST205'
+        ? 'Supabase에 rooms/submissions 테이블이 없습니다. SQL Editor에서 supabase/schema.sql을 실행해주세요.'
+        : err.message || '데이터를 불러오지 못했습니다.';
+      setError(msg);
     }
   }, [roomId]);
 

@@ -19,7 +19,10 @@ export default function LandingPage() {
       const roomId = await createRoom();
       navigate(`/r/${roomId}`);
     } catch (err) {
-      setError(err.message || '방을 만들지 못했습니다.');
+      const msg = err.code === 'PGRST205'
+        ? 'Supabase에 rooms/submissions 테이블이 없습니다. SQL Editor에서 supabase/schema.sql을 실행해주세요.'
+        : err.message || '방을 만들지 못했습니다.';
+      setError(msg);
     } finally {
       setLoading(false);
     }

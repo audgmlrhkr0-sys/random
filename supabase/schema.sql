@@ -25,6 +25,13 @@ alter table submissions enable row level security;
 create policy "rooms_all" on rooms for all using (true) with check (true);
 create policy "submissions_all" on submissions for all using (true) with check (true);
 
+grant usage on schema public to anon, authenticated;
+grant all on rooms to anon, authenticated;
+grant all on submissions to anon, authenticated;
+
 -- Realtime 활성화 (대시보드에서 토글 못 찾으면 이 SQL로 켜세요)
 alter publication supabase_realtime add table rooms;
 alter publication supabase_realtime add table submissions;
+
+-- 테이블 만들었는데 404가 나면 SQL Editor에서 이것도 실행
+notify pgrst, 'reload schema';

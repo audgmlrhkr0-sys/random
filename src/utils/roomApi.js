@@ -51,7 +51,16 @@ export async function fetchRoomData(roomId) {
       .order('created_at', { ascending: true }),
   ]);
 
-  if (roomRes.error) throw roomRes.error;
+  if (roomRes.error) {
+    if (roomRes.error.code === 'PGRST116') {
+      return {
+        excludeOwnTeam: false,
+        drawResult: null,
+        submissions: (submissionsRes.data ?? []).map(mapSubmission),
+      };
+    }
+    throw roomRes.error;
+  }
   if (submissionsRes.error) throw submissionsRes.error;
 
   return {

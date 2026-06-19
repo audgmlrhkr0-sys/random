@@ -5,8 +5,9 @@ import styles from './PasswordGate.module.css';
 export default function PasswordGate({
   onUnlock,
   expectedPassword = ROOM_PASSWORD,
-  title = '비밀번호 입력',
-  desc = '선생님이 알려준 숫자를 입력하세요',
+  title = '감상법 제비뽑기',
+  subtitle = '함께 다양한 감상법을 모으고 따라해 보세요!',
+  desc = '진행자가 알려준 숫자를 입력하세요',
   submitLabel = '들어가기',
 }) {
   const [password, setPassword] = useState('');
@@ -25,8 +26,9 @@ export default function PasswordGate({
     <div className={styles.wrap}>
       <div className={styles.panel}>
         <h1 className={styles.title}>{title}</h1>
-        <p className={styles.desc}>{desc}</p>
+        {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
         <form onSubmit={handleSubmit} className={styles.form}>
+          {desc && <p className={styles.desc}>{desc}</p>}
           <input
             type="password"
             inputMode="numeric"

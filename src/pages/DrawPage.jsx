@@ -85,7 +85,8 @@ export default function DrawPage() {
         <PasswordGate
           expectedPassword={DRAW_PASSWORD}
           title="추첨 결과"
-          desc="선생님만 아는 숫자를 입력하세요"
+          subtitle=""
+          desc="진행자만 아는 숫자를 입력하세요"
           submitLabel="들어가기"
           onUnlock={handleDrawUnlock}
         />

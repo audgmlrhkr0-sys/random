@@ -67,7 +67,7 @@ export default function MainPage() {
           {saveStatus === 'saving' && <span className={styles.saveHint}>저장 중...</span>}
           {saveStatus === 'saved' && <span className={styles.saveOk}>✓ 모두에게 반영됨</span>}
           {saveStatus === 'error' && (
-            <span className={styles.saveErr}>저장 안 됨 — Supabase SQL 확인</span>
+            <span className={styles.saveErr}>저장 안 됨 — 다시 시도해 주세요</span>
           )}
           {drawResult && (
             <Link to={`/r/${roomId}/result`} className={styles.resultLink}>

@@ -28,12 +28,9 @@ export function generateRoomId() {
 export async function checkConnection() {
   const { error } = await supabase.from('rooms').select('id').limit(1);
   if (error) {
-    if (error.code === 'PGRST205') {
-      return { ok: false, message: '테이블이 없어요. Supabase SQL Editor에서 schema.sql 실행' };
-    }
-    return { ok: false, message: '연결 실패. npm run dev로 실행했는지 확인' };
+    return { ok: false, message: '연결할 수 없습니다. 잠시 후 다시 시도해 주세요.' };
   }
-  return { ok: true, message: '연결됨!' };
+  return { ok: true, message: '연결됨' };
 }
 
 export async function createRoom() {
@@ -104,11 +101,7 @@ export async function updateTeamNames(roomId, teamNames) {
     .single();
 
   if (error) {
-    const msg =
-      error.code === 'PGRST204' || error.message?.includes('team_names')
-        ? 'team_names 컬럼이 없습니다. Supabase SQL Editor에서 migration_team_names.sql 실행'
-        : error.message;
-    throw new Error(msg);
+    throw new Error('팀 이름을 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.');
   }
   return data?.team_names;
 }

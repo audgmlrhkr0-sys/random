@@ -42,8 +42,8 @@ export function RoomProvider() {
       setError('');
     } catch (err) {
       const msg = err.code === 'PGRST205'
-        ? 'Supabase에 rooms/submissions 테이블이 없습니다. SQL Editor에서 supabase/schema.sql을 실행해주세요.'
-        : err.message || '데이터를 불러오지 못했습니다.';
+        ? '데이터를 불러올 수 없습니다. 잠시 후 다시 시도해 주세요.'
+        : '데이터를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.';
       setError(msg);
     }
   }, [roomId]);
@@ -51,7 +51,7 @@ export function RoomProvider() {
   useEffect(() => {
     if (!isSupabaseConfigured) {
       setLoading(false);
-      setError('Supabase 설정이 필요합니다.');
+      setError('데이터를 불러올 수 없습니다. 잠시 후 다시 시도해 주세요.');
       return undefined;
     }
 

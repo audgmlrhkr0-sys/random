@@ -9,7 +9,7 @@ export default function MainPage() {
   const { roomId, submissions, drawResult, loading, error } = useRoom();
   const [copied, setCopied] = useState(false);
 
-  const shareUrl = `${window.location.origin}/r/${roomId}`;
+  const shareUrl = `${window.location.origin}${window.location.pathname}#/r/${roomId}`;
 
   const handleCopy = async () => {
     try {

@@ -1,12 +1,8 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
-import {
-  DRAW_COUNT_PER_TEAM,
-  getExcludeOwnTeam,
-  setExcludeOwnTeam,
-} from '../config';
-import { getSubmissions, clearAllData } from '../utils/storage';
+import { useRoom } from '../context/RoomContext';
+import { DRAW_COUNT_PER_TEAM } from '../config';
 import {
   performDraw,
   getRequiredSubmissionCount,
@@ -16,27 +12,33 @@ import styles from './DrawPage.module.css';
 
 export default function DrawPage() {
   const navigate = useNavigate();
+  const {
+    roomId,
+    submissions,
+    excludeOwnTeam,
+    setExcludeOwnTeam,
+    saveDrawResult,
+    clearAllData,
+    loading,
+  } = useRoom();
   const [shuffling, setShuffling] = useState(false);
   const [error, setError] = useState('');
   const [showResetConfirm, setShowResetConfirm] = useState(false);
-  const [excludeOwn, setExcludeOwn] = useState(() => getExcludeOwnTeam());
 
-  const submissions = getSubmissions();
   const required = getRequiredSubmissionCount();
-  const shortage = getSubmissionShortage();
+  const shortage = getSubmissionShortage(submissions);
   const canDrawNow = shortage === 0;
 
-  const handleToggleExclude = (checked) => {
-    setExcludeOwn(checked);
-    setExcludeOwnTeam(checked);
+  const handleToggleExclude = async (checked) => {
+    await setExcludeOwnTeam(checked);
   };
 
   const handleDraw = () => {
     setError('');
     setShuffling(true);
 
-    setTimeout(() => {
-      const result = performDraw();
+    setTimeout(async () => {
+      const result = performDraw(submissions, excludeOwnTeam);
       setShuffling(false);
 
       if (!result.success) {
@@ -44,22 +46,40 @@ export default function DrawPage() {
         return;
       }
 
-      navigate('/result');
+      try {
+        await saveDrawResult(result.result);
+        navigate(`/r/${roomId}/result`);
+      } catch (err) {
+        setError(err.message || '결과 저장에 실패했습니다.');
+      }
     }, 1500);
   };
 
-  const handleReset = () => {
-    clearAllData();
-    setShowResetConfirm(false);
-    setError('');
-    window.location.reload();
+  const handleReset = async () => {
+    try {
+      await clearAllData();
+      setShowResetConfirm(false);
+      setError('');
+    } catch (err) {
+      setError(err.message || '초기화에 실패했습니다.');
+    }
   };
 
+  if (loading) {
+    return (
+      <Layout showBack backTo={`/r/${roomId}`}>
+        <div className={styles.container}>
+          <p>불러오는 중...</p>
+        </div>
+      </Layout>
+    );
+  }
+
   return (
-    <Layout showBack backTo="/">
+    <Layout showBack backTo={`/r/${roomId}`}>
       <div className={styles.container}>
         <h1 className={styles.title}>추첨</h1>
-        <p className={styles.subtitle}>진행자 전용 화면</p>
+        <p className={styles.subtitle}>진행자 전용 화면 · 모든 기기에 실시간 반영</p>
 
         <div className={styles.stats}>
           <div className={styles.statCard}>
@@ -106,10 +126,10 @@ export default function DrawPage() {
           )}
         </div>
 
-        <label className={`${styles.optionToggle} ${excludeOwn ? styles.optionToggleActive : ''}`}>
+        <label className={`${styles.optionToggle} ${excludeOwnTeam ? styles.optionToggleActive : ''}`}>
           <input
             type="checkbox"
-            checked={excludeOwn}
+            checked={excludeOwnTeam}
             onChange={(e) => handleToggleExclude(e.target.checked)}
           />
           자기 팀 쪽지 제외하기

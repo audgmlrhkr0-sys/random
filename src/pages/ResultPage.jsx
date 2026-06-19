@@ -1,22 +1,32 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
+import { useRoom } from '../context/RoomContext';
 import { TEAM_NAMES, SHOW_AUTHOR_TEAM, TEAM_COUNT } from '../config';
-import { getDrawResult } from '../utils/storage';
 import styles from './ResultPage.module.css';
 
 export default function ResultPage() {
   const navigate = useNavigate();
-  const result = getDrawResult();
+  const { roomId, drawResult, loading } = useRoom();
   const [showAuthor, setShowAuthor] = useState(SHOW_AUTHOR_TEAM);
   const [revealedCards, setRevealedCards] = useState({});
 
-  if (!result) {
+  if (loading) {
     return (
-      <Layout showBack backTo="/">
+      <Layout showBack backTo={`/r/${roomId}`}>
+        <div className={styles.empty}>
+          <p>불러오는 중...</p>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (!drawResult) {
+    return (
+      <Layout showBack backTo={`/r/${roomId}`}>
         <div className={styles.empty}>
           <p>아직 추첨 결과가 없습니다.</p>
-          <Link to="/draw" className={styles.linkBtn}>
+          <Link to={`/r/${roomId}/draw`} className={styles.linkBtn}>
             추첨하러 가기
           </Link>
         </div>
@@ -30,9 +40,10 @@ export default function ResultPage() {
   };
 
   return (
-    <Layout showBack backTo="/">
+    <Layout showBack backTo={`/r/${roomId}`}>
       <div className={styles.container}>
         <h1 className={styles.title}>추첨 결과</h1>
+        <p className={styles.syncHint}>모든 기기에서 같은 결과를 볼 수 있습니다</p>
 
         <label className={styles.toggle}>
           <input
@@ -47,7 +58,7 @@ export default function ResultPage() {
           {Array.from({ length: TEAM_COUNT }, (_, i) => {
             const teamId = i + 1;
             const teamName = TEAM_NAMES[i] ?? `${teamId}팀`;
-            const notes = result[teamId] ?? [];
+            const notes = drawResult[teamId] ?? [];
 
             return (
               <section key={teamId} className={styles.teamSection}>
@@ -96,11 +107,11 @@ export default function ResultPage() {
           <button
             type="button"
             className={styles.redrawBtn}
-            onClick={() => navigate('/draw')}
+            onClick={() => navigate(`/r/${roomId}/draw`)}
           >
             다시 추첨
           </button>
-          <Link to="/" className={styles.homeBtn}>
+          <Link to={`/r/${roomId}`} className={styles.homeBtn}>
             메인으로
           </Link>
         </div>

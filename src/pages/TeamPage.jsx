@@ -5,50 +5,51 @@ import MemoPad from '../components/MemoPad';
 import Pencil from '../components/Pencil';
 import FoldedNote from '../components/FoldedNote';
 import WriteModal from '../components/WriteModal';
+import { useRoom } from '../context/RoomContext';
 import { TEAM_NAMES, MIN_SUBMISSIONS_HINT } from '../config';
-import {
-  addSubmission,
-  deleteSubmission,
-  getTeamSubmissions,
-} from '../utils/storage';
 import styles from './TeamPage.module.css';
 
 export default function TeamPage() {
   const { teamId } = useParams();
+  const { roomId, getTeamSubmissions, addSubmission, deleteSubmission, loading } = useRoom();
   const teamIndex = Number(teamId) - 1;
 
   if (teamIndex < 0 || teamIndex >= TEAM_NAMES.length) {
-    return <Navigate to="/" replace />;
+    return <Navigate to={`/r/${roomId}`} replace />;
   }
 
   const teamName = TEAM_NAMES[teamIndex];
-  const [submissions, setSubmissions] = useState(() => getTeamSubmissions(teamId));
+  const submissions = getTeamSubmissions(teamId);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const refresh = useCallback(() => {
-    setSubmissions(getTeamSubmissions(teamId));
-  }, [teamId]);
-
   const handleSubmit = useCallback(
-    (text) => {
-      addSubmission({ teamId: Number(teamId), text });
-      refresh();
+    async (text) => {
+      await addSubmission({ teamId: Number(teamId), text });
     },
-    [teamId, refresh]
+    [teamId, addSubmission]
   );
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (confirm('이 쪽지를 삭제할까요?')) {
-      deleteSubmission(id);
-      refresh();
+      await deleteSubmission(id);
     }
   };
 
   const count = submissions.length;
   const needsMore = count < MIN_SUBMISSIONS_HINT;
 
+  if (loading) {
+    return (
+      <Layout showBack backTo={`/r/${roomId}`}>
+        <div className={styles.container}>
+          <p>불러오는 중...</p>
+        </div>
+      </Layout>
+    );
+  }
+
   return (
-    <Layout showBack backTo="/">
+    <Layout showBack backTo={`/r/${roomId}`}>
       <div className={styles.container}>
         <header className={styles.header}>
           <h1 className={styles.teamTitle}>{teamName}</h1>

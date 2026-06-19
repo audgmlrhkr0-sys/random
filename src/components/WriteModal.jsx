@@ -17,12 +17,15 @@ export default function WriteModal({ isOpen, onClose, onSubmit, teamName }) {
       setPhase('sent');
     }, 700);
 
-    setTimeout(() => {
-      onSubmit(text);
-      setText('');
-      setPhase('writing');
-      setSubmitting(false);
-      onClose();
+    setTimeout(async () => {
+      try {
+        await onSubmit(text);
+        setText('');
+        setPhase('writing');
+        onClose();
+      } finally {
+        setSubmitting(false);
+      }
     }, 2200);
   };
 

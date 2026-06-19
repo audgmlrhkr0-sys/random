@@ -1,9 +1,4 @@
-import {
-  DRAW_COUNT_PER_TEAM,
-  TEAM_COUNT,
-  getExcludeOwnTeam,
-} from '../config';
-import { getSubmissions, saveDrawResult, saveSubmissions } from './storage';
+import { DRAW_COUNT_PER_TEAM, TEAM_COUNT } from '../config';
 
 export function fisherYatesShuffle(array) {
   const arr = [...array];
@@ -18,19 +13,16 @@ export function getRequiredSubmissionCount() {
   return TEAM_COUNT * DRAW_COUNT_PER_TEAM;
 }
 
-export function canDraw() {
-  const submissions = getSubmissions();
+export function canDraw(submissions) {
   return submissions.length >= getRequiredSubmissionCount();
 }
 
-export function getSubmissionShortage() {
+export function getSubmissionShortage(submissions) {
   const required = getRequiredSubmissionCount();
-  const current = getSubmissions().length;
-  return Math.max(0, required - current);
+  return Math.max(0, required - submissions.length);
 }
 
-export function performDraw() {
-  const allSubmissions = getSubmissions();
+export function performDraw(allSubmissions, excludeOwnTeam) {
   const required = getRequiredSubmissionCount();
 
   if (allSubmissions.length < required) {
@@ -56,7 +48,7 @@ export function performDraw() {
 
       const candidate = pool.shift();
 
-      if (getExcludeOwnTeam() && candidate.teamId === teamId) {
+      if (excludeOwnTeam && candidate.teamId === teamId) {
         pool.push(candidate);
         if (!pool.some((item) => item.teamId !== teamId)) {
           return {
@@ -72,14 +64,10 @@ export function performDraw() {
         text: candidate.text,
         authorTeamId: candidate.teamId,
       });
-      candidate.drawnByTeam = teamId;
     }
 
     result[teamId] = assigned;
   }
-
-  saveSubmissions(allSubmissions);
-  saveDrawResult(result);
 
   return { success: true, result };
 }

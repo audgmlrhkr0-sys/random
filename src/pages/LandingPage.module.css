@@ -1,0 +1,106 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+  text-align: center;
+  gap: 1.25rem;
+  padding: 1rem;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.subtitle {
+  font-size: 1.05rem;
+  color: var(--ink-light);
+  max-width: 420px;
+}
+
+.createBtn {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(180deg, var(--blue), var(--blue-dark));
+  border: 3px solid var(--blue-dark);
+  border-radius: 999px;
+  box-shadow: 0 5px 0 #3a8fd4;
+  cursor: pointer;
+}
+
+.createBtn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.divider {
+  color: var(--ink-light);
+  font-size: 0.9rem;
+}
+
+.joinForm {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.joinInput {
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--sky-deep);
+  border-radius: 12px;
+  font-size: 1rem;
+  min-width: 220px;
+}
+
+.joinBtn {
+  padding: 0.75rem 1.25rem;
+  font-weight: 700;
+  background: var(--white);
+  border: 2px solid var(--sky-deep);
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.joinBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #c0392b;
+  font-weight: 600;
+}
+
+.setupBox {
+  max-width: 520px;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.8);
+  border: 2px solid var(--white);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.setupBox h2 {
+  font-size: 1.2rem;
+  margin-bottom: 0.75rem;
+}
+
+.setupBox ol {
+  margin-top: 1rem;
+  padding-left: 1.25rem;
+  line-height: 1.8;
+}
+
+.setupBox code {
+  background: #f0f4f8;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  font-size: 0.9em;
+}

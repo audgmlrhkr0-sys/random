@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { Outlet, useParams } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import Layout from '../components/Layout';
 import PasswordGate from '../components/PasswordGate';
-import { DEFAULT_TEAM_NAMES, getRoomUnlockKey } from '../config';
+import { DEFAULT_ROOM_ID, DEFAULT_TEAM_NAMES, getRoomUnlockKey } from '../config';
 import { isSupabaseConfigured } from '../utils/supabase';
 import {
   ensureRoom,
@@ -19,7 +19,7 @@ import {
 const RoomContext = createContext(null);
 
 export function RoomProvider() {
-  const { roomId } = useParams();
+  const roomId = DEFAULT_ROOM_ID;
   const [submissions, setSubmissions] = useState([]);
   const [drawResult, setDrawResult] = useState(null);
   const [teamNames, setTeamNames] = useState([...DEFAULT_TEAM_NAMES]);
@@ -28,7 +28,7 @@ export function RoomProvider() {
   const [error, setError] = useState('');
   const [saveStatus, setSaveStatus] = useState('');
   const [unlocked, setUnlocked] = useState(
-    () => sessionStorage.getItem(getRoomUnlockKey(roomId)) === '1'
+    () => sessionStorage.getItem(getRoomUnlockKey()) === '1'
   );
 
   const reload = useCallback(async () => {
@@ -79,9 +79,9 @@ export function RoomProvider() {
   }, [roomId, reload]);
 
   const handleUnlock = useCallback(() => {
-    sessionStorage.setItem(getRoomUnlockKey(roomId), '1');
+    sessionStorage.setItem(getRoomUnlockKey(), '1');
     setUnlocked(true);
-  }, [roomId]);
+  }, []);
 
   const addSubmission = useCallback(
     async ({ teamId, text }) => {
@@ -153,7 +153,6 @@ export function RoomProvider() {
   );
 
   const value = {
-    roomId,
     submissions,
     drawResult,
     teamNames,

@@ -3,12 +3,10 @@ import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { useRoom } from '../context/RoomContext';
 import { TEAM_COUNT } from '../config';
-import { getRoomShareUrl } from '../utils/shareUrl';
 import styles from './MainPage.module.css';
 
 export default function MainPage() {
   const {
-    roomId,
     submissions,
     drawResult,
     teamNames,
@@ -17,9 +15,7 @@ export default function MainPage() {
   } = useRoom();
 
   const [localNames, setLocalNames] = useState(teamNames);
-  const [copied, setCopied] = useState(false);
   const skipSync = useRef(false);
-  const shareUrl = getRoomShareUrl(roomId);
 
   useEffect(() => {
     if (skipSync.current) {
@@ -57,37 +53,11 @@ export default function MainPage() {
     }
   };
 
-  const handleCopyLink = async () => {
-    try {
-      await navigator.clipboard.writeText(shareUrl);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      setCopied(false);
-    }
-  };
-
   return (
     <Layout>
       <div className={styles.container}>
         <h1 className={styles.title}>감상법 제비뽑기</h1>
         <p className={styles.subtitle}>우리 팀 이름을 바꾸고 입장하세요!</p>
-
-        <div className={styles.shareBox}>
-          <p className={styles.shareLabel}>함께 쓸 링크</p>
-          <div className={styles.shareRow}>
-            <input
-              type="text"
-              readOnly
-              value={shareUrl}
-              className={styles.shareInput}
-              aria-label="공유 링크"
-            />
-            <button type="button" className={styles.copyBtn} onClick={handleCopyLink}>
-              {copied ? '복사됨!' : '복사'}
-            </button>
-          </div>
-        </div>
 
         <div className={styles.statusBar}>
           <span>
@@ -99,7 +69,7 @@ export default function MainPage() {
             <span className={styles.saveErr}>저장 안 됨 — 다시 시도해 주세요</span>
           )}
           {drawResult && (
-            <Link to={`/r/${roomId}/result`} className={styles.resultLink}>
+            <Link to="/result" className={styles.resultLink}>
               추첨 결과 보기
             </Link>
           )}
@@ -122,7 +92,7 @@ export default function MainPage() {
                   aria-label={`${index + 1}팀 이름`}
                 />
                 <span className={styles.teamCount}>{teamSubmissions.length}개 제출</span>
-                <Link to={`/r/${roomId}/team/${index + 1}`} className={styles.enterBtn}>
+                <Link to={`/team/${index + 1}`} className={styles.enterBtn}>
                   입장하기
                 </Link>
               </div>
@@ -130,7 +100,7 @@ export default function MainPage() {
           })}
         </div>
 
-        <Link to={`/r/${roomId}/draw`} className={styles.drawLink}>
+        <Link to="/draw" className={styles.drawLink}>
           추첨 결과
         </Link>
       </div>

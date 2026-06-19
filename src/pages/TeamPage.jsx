@@ -11,12 +11,11 @@ import styles from './TeamPage.module.css';
 
 export default function TeamPage() {
   const { teamId } = useParams();
-  const { roomId, getTeamSubmissions, addSubmission, deleteSubmission, getTeamName, loading } =
-    useRoom();
+  const { getTeamSubmissions, addSubmission, deleteSubmission, getTeamName, loading } = useRoom();
   const teamIndex = Number(teamId) - 1;
 
   if (teamIndex < 0 || teamIndex >= TEAM_COUNT) {
-    return <Navigate to={`/r/${roomId}`} replace />;
+    return <Navigate to="/" replace />;
   }
 
   const teamName = getTeamName(teamId);
@@ -41,7 +40,7 @@ export default function TeamPage() {
 
   if (loading) {
     return (
-      <Layout showBack backTo={`/r/${roomId}`}>
+      <Layout showBack backTo="/">
         <div className={styles.container}>
           <p>불러오는 중...</p>
         </div>
@@ -50,7 +49,7 @@ export default function TeamPage() {
   }
 
   return (
-    <Layout showBack backTo={`/r/${roomId}`}>
+    <Layout showBack backTo="/">
       <div className={styles.container}>
         <header className={styles.header}>
           <h1 className={styles.teamTitle}>{teamName}</h1>

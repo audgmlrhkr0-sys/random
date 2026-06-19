@@ -7,13 +7,13 @@ import styles from './ResultPage.module.css';
 
 export default function ResultPage() {
   const navigate = useNavigate();
-  const { roomId, drawResult, loading, getTeamName } = useRoom();
+  const { drawResult, loading, getTeamName } = useRoom();
   const [showAuthor, setShowAuthor] = useState(true);
   const [revealedCards, setRevealedCards] = useState({});
 
   if (loading) {
     return (
-      <Layout showBack backTo={`/r/${roomId}`}>
+      <Layout showBack backTo="/">
         <div className={styles.empty}>
           <p>불러오는 중...</p>
         </div>
@@ -23,10 +23,10 @@ export default function ResultPage() {
 
   if (!drawResult) {
     return (
-      <Layout showBack backTo={`/r/${roomId}`}>
+      <Layout showBack backTo="/">
         <div className={styles.empty}>
           <p>아직 추첨 결과가 없습니다.</p>
-          <Link to={`/r/${roomId}/draw`} className={styles.linkBtn}>
+          <Link to="/draw" className={styles.linkBtn}>
             추첨 결과
           </Link>
         </div>
@@ -40,7 +40,7 @@ export default function ResultPage() {
   };
 
   return (
-    <Layout showBack backTo={`/r/${roomId}`}>
+    <Layout showBack backTo="/">
       <div className={styles.container}>
         <h1 className={styles.title}>추첨 결과</h1>
         <p className={styles.syncHint}>모든 기기에서 같은 결과를 볼 수 있습니다</p>
@@ -110,11 +110,11 @@ export default function ResultPage() {
           <button
             type="button"
             className={styles.redrawBtn}
-            onClick={() => navigate(`/r/${roomId}/draw`)}
+            onClick={() => navigate('/draw')}
           >
             추첨 결과
           </button>
-          <Link to={`/r/${roomId}`} className={styles.homeBtn}>
+          <Link to="/" className={styles.homeBtn}>
             메인으로
           </Link>
         </div>

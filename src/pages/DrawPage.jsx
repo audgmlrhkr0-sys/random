@@ -5,7 +5,6 @@ import PasswordGate from '../components/PasswordGate';
 import { useRoom } from '../context/RoomContext';
 import {
   DRAW_COUNT_PER_TEAM,
-  MIN_TOTAL_FOR_DRAW,
   DRAW_PASSWORD,
   getDrawUnlockKey,
 } from '../config';
@@ -14,9 +13,9 @@ import styles from './DrawPage.module.css';
 
 export default function DrawPage() {
   const navigate = useNavigate();
-  const { roomId, submissions, drawResult, saveDrawResult, clearAllData, loading, getTeamName, teamNames } = useRoom();
+  const { submissions, drawResult, saveDrawResult, clearAllData, loading, getTeamName, teamNames } = useRoom();
   const [drawUnlocked, setDrawUnlocked] = useState(
-    () => sessionStorage.getItem(getDrawUnlockKey(roomId)) === '1'
+    () => sessionStorage.getItem(getDrawUnlockKey()) === '1'
   );
   const [shuffling, setShuffling] = useState(false);
   const [error, setError] = useState('');
@@ -27,7 +26,7 @@ export default function DrawPage() {
   const canDrawNow = !statusMessage && !drawResult;
 
   const handleDrawUnlock = () => {
-    sessionStorage.setItem(getDrawUnlockKey(roomId), '1');
+    sessionStorage.setItem(getDrawUnlockKey(), '1');
     setDrawUnlocked(true);
   };
 
@@ -46,7 +45,7 @@ export default function DrawPage() {
 
       try {
         await saveDrawResult(result.result);
-        navigate(`/r/${roomId}/result`);
+        navigate('/result');
       } catch (err) {
         setError(err.message || '결과 저장에 실패했습니다.');
       }
@@ -65,7 +64,7 @@ export default function DrawPage() {
 
   if (loading) {
     return (
-      <Layout showBack backTo={`/r/${roomId}`}>
+      <Layout showBack backTo="/">
         <div className={styles.container}>
           <p>불러오는 중...</p>
         </div>
@@ -75,7 +74,7 @@ export default function DrawPage() {
 
   if (!drawUnlocked) {
     return (
-      <Layout showBack backTo={`/r/${roomId}`}>
+      <Layout showBack backTo="/">
         <PasswordGate
           expectedPassword={DRAW_PASSWORD}
           title="추첨 결과"
@@ -89,7 +88,7 @@ export default function DrawPage() {
   }
 
   return (
-    <Layout showBack backTo={`/r/${roomId}`}>
+    <Layout showBack backTo="/">
       <div className={styles.container}>
         <h1 className={styles.title}>추첨 결과</h1>
 
@@ -113,7 +112,7 @@ export default function DrawPage() {
         {drawResult && (
           <div className={styles.doneNotice}>
             이미 추첨이 끝났어요.{' '}
-            <Link to={`/r/${roomId}/result`} className={styles.resultLink}>
+            <Link to="/result" className={styles.resultLink}>
               결과 보기
             </Link>
           </div>

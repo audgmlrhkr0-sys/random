@@ -17,12 +17,12 @@ export const STORAGE_KEYS = {
   excludeOwnTeam: 'appreciation_exclude_own_team',
 };
 
-export function getRoomUnlockKey(roomId) {
-  return `room_unlock_${roomId}`;
+export function getRoomUnlockKey() {
+  return 'room_unlock';
 }
 
-export function getDrawUnlockKey(roomId) {
-  return `draw_unlock_${roomId}`;
+export function getDrawUnlockKey() {
+  return 'draw_unlock';
 }
 
 export function getExcludeOwnTeam() {
